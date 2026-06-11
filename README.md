@@ -1,22 +1,15 @@
 # TechNova_ToDoApp
-Interviewers love questions like:  
-<br>
-How did you store data? 
-<br>
-How did you update the UI? 
-<br>
-How does localStorage work?  
-<br>
+✅ TASK 2: To Do App
 A To-Do App teaches all of that.  
 <br>
 <br>
 Make it advanced:  
-✅ Add task priorities 
+1)Add task priorities 
 <br>
-✅ Add due dates 
+2)Add due dates 
 <br>
-✅ Save tasks in localStorage 
+3)Save tasks in localStorage 
 <br>
-✅ Search tasks 
+4)Search tasks 
 <br>
-✅ Dark mode
+5)Dark mode
