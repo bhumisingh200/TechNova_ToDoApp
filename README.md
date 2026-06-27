@@ -1,86 +1,423 @@
-# TechNova | Premium Task Manager & Productivity Dashboard
+# 🚀 TechNova Task Manager & Productivity Dashboard
 
-TechNova is an advanced, high-performance To-Do application and productivity workspace built using vanilla web technologies. It is designed to offer a beautiful, desktop-class experience with interactive widgets, custom analytics, gamification, and robust data management.
+<div align="center">
 
----
+### A Modern Productivity & Task Management Platform
 
-## 🚀 Key Features
+An advanced productivity dashboard built with **HTML5, CSS3, and Vanilla JavaScript**, featuring Kanban workflows, Pomodoro focus sessions, productivity analytics, gamification, and persistent local storage.
 
-### 1. User Authentication System
-* **Personalized Workspaces:** Secure user signup and login portal powered entirely by client-side local storage validation.
-* **Access Control:** Restricts workspace access and keeps dashboard profiles isolated.
-* **Greeting & Session State:** Welcomes users dynamically (e.g., "Welcome back, Achiever!") and supports instant session logging out.
+<p>
+<img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"/>
+<img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"/>
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"/>
+<img src="https://img.shields.io/badge/Responsive-Yes-success?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/LocalStorage-Persistent-blue?style=for-the-badge"/>
+</p>
 
-### 2. Interactive Productivity Dashboard
-* **Dynamic Progress Indicators:** Live SVG-based ring tracking overall task completion percentage.
-* **Animated Counter Cards:** High-level metrics showing *Total Tasks*, *Completed*, *Pending*, and *Completion Rate* that animate upwards on page load.
-* **Analytics Trends:** Visualized double-dataset area charts (Tasks Completed vs. Pending over the last 7 days) rendered dynamically using Chart.js.
-* **Focus Drawer:** Dedicated card displaying pinned and high-priority tasks requiring urgent attention.
-
-### 3. Comprehensive Task Management (CRUD)
-* **Creation & Modification:** Quick-action overlay modal for creating or updating tasks.
-* **Metadata Rich:** Supports titles, detailed descriptions, priorities (🟢 Low, 🟡 Medium, 🔴 High), due dates, categories, and custom comma-separated tags.
-* **In-Place Actions:** Easily complete, edit, pin, favorite, or delete tasks directly from task lists or Kanban cards.
-
-### 4. Advanced Sorting, Filtering & Search
-* **Status Filters:** Dedicated tabs for *All*, *Active*, *Completed*, *Pinned*, and *Favorites*.
-* **Semantic Category Filters:** Sidebar classification links for *Work*, *Personal*, *Study*, and *Health*.
-* **Dynamic Search:** Global search bar targeting titles, descriptions, and hashtags (`#tags`).
-* **Advanced Sorting:** Sort dynamically by *Pinned First*, *Due Date (Ascending)*, *Priority (High to Low)*, *Name (A-Z)*, or *Completion Status*.
-
-### 5. Interactive Kanban Board
-* **Visual Workflows:** Three column layouts: *To Do*, *Doing*, and *Done* with individual header counters.
-* **Drag-and-Drop Interface:** Intuitive HTML5 Drag and Drop APIs with smooth drop-zone animations, instantly syncing database and task state.
-* **Quick-Add Actions:** Direct column action buttons to insert items straight into a specific workflow status.
-
-### 6. Monthly Productivity Calendar
-* **Visual Calendar Grid:** A custom-rendered monthly calendar grid highlighting days that have scheduled due dates.
-* **Task Calendaring:** Month-by-month navigation (prev/next).
-* **Day-Level Details:** Clicking any day reveals a dedicated slide-out drawer containing a list of tasks due on that specific date.
-
-### 7. Integrated Pomodoro Focus Timer
-* **Mini Header Widget:** Dedicated countdown timer (25-minute standard focus interval) persistent across views.
-* **Task Linking:** Link an active task directly to the Pomodoro timer via a dropdown selector to log focus hours.
-* **Interval Completion:** Tracks completed Pomodoro counters per task. Alerts users with dual chime notifications upon completion.
-
-### 8. Gamified Achievements & Audio Feedback
-* **Achievement Milestones:** Grid of unlockable badges such as *First Steps* (🏆), *Productivity Titan* (👑), *Flow State Master* (🧘), and *Safe & Sound* (💾).
-* **Web Audio Synthesis:** Uses the Web Audio API to synthesize custom chimes, arpeggios, and alarm tones client-side for task completions and milestone unlocks.
-* **Real-time Toasts:** Interactive notifications highlighting milestone progress and actions.
-
-### 9. Portable Data Tools
-* **JSON Export:** Back up your workspace settings, stats, and tasks into a downloadable JSON file.
-* **CSV Export:** Save tasks in a spreadsheet-compatible comma-separated format.
-* **JSON Backup Import:** Restore complete task logs, theme colors, achievements, and statistics from backup.
-* **Hard Reset:** A secure danger zone action to permanently purge all workspace storage, settings, and themes.
-
-### 10. Responsive Design & Visual Styling
-* **Fluid Layouts:** Sleek modern dashboard featuring glassmorphism, responsive grids, and clean fonts.
-* **Color Customizer:** Real-time HSL color themes (supporting Blue, Purple, and Green accents).
-* **Light/Dark Modes:** Highly responsive contrast controller with animated theme transitions.
-* **Mobile Support:** Adaptive layouts with responsive toggles for mobile viewports.
+</div>
 
 ---
 
-## 🛠️ Technology Stack
+# 📖 Overview
 
-* **Structure:** Semantic HTML5
-* **Styling:** Vanilla CSS (Modern custom properties/variables, flexbox, CSS grid, HSL-color spaces, dynamic keyframe animations)
-* **Logic:** Vanilla JavaScript (ES6+, LocalStorage state synchronization, Web Audio API, HTML5 Drag & Drop)
-* **Visualization:** Chart.js (CDN-delivered canvas plotting)
+TechNova Task Manager is a feature-rich productivity application designed to help users organize their daily workflow efficiently.
 
----
+Unlike a basic To-Do application, it combines task management, Kanban boards, Pomodoro focus sessions, analytics dashboards, achievements, data export/import, and customizable themes into a single responsive workspace.
 
-## 📂 File Architecture
-
-* **[index.html](file:///c:/Users/admin/Downloads/WebTask3/TechNova_ToDoApp/index.html):** The primary UI document containing views, header controls, auth modals, and core page structure.
-* **[styles.css](file:///c:/Users/admin/Downloads/WebTask3/TechNova_ToDoApp/styles.css):** Global styling, HSL dark/light variables, theme accents, responsive media queries, and transition animations.
-* **[app.js](file:///c:/Users/admin/Downloads/WebTask3/TechNova_ToDoApp/app.js):** Client-side application script managing authentication routing, timer loop, Web Audio generation, drag/drop handlers, calendar generation, and state persistence.
+All application data is stored locally using the browser's LocalStorage API, allowing users to continue working even after refreshing the page.
 
 ---
 
-## 🏃 Getting Started
+# ✨ Features
 
-1. Double-click **[index.html](file:///c:/Users/admin/Downloads/WebTask3/TechNova_ToDoApp/index.html)** to load the app directly in any modern browser.
-2. Sign up or use default credentials (no server or backend environment setup is required).
-3. Experience fully functional persistent dashboards, timer sessions, and game badges!
+## 👤 User Workspace
+
+* User Registration & Login
+* Personalized Dashboard
+* Session Management
+* Secure Local Storage
+* Welcome Messages
+
+---
+
+## ✅ Task Management
+
+Create and manage tasks with:
+
+* Title
+* Description
+* Priority Levels
+* Categories
+* Due Dates
+* Custom Tags
+* Pin Tasks
+* Favorite Tasks
+* Edit Tasks
+* Delete Tasks
+* Mark Complete
+
+---
+
+## 📊 Productivity Dashboard
+
+Monitor productivity using:
+
+* Animated Statistics Cards
+* Completion Progress Ring
+* Task Completion Percentage
+* Weekly Analytics Charts
+* Focus Drawer
+* Productivity Summary
+
+---
+
+## 📋 Kanban Board
+
+Interactive drag-and-drop workflow.
+
+Columns include:
+
+* To Do
+* Doing
+* Done
+
+Features:
+
+* Drag & Drop
+* Live Counters
+* Quick Add
+* Instant Updates
+
+---
+
+## 📅 Calendar Planner
+
+* Monthly Calendar View
+* Due Date Indicators
+* Daily Task Drawer
+* Previous / Next Month Navigation
+
+---
+
+## ⏱ Pomodoro Focus Timer
+
+* 25-Minute Focus Sessions
+* Break Notifications
+* Task Linking
+* Focus Statistics
+* Audio Alerts
+
+---
+
+## 🏆 Achievement System
+
+Unlock badges such as:
+
+* First Task Completed
+* Productivity Titan
+* Flow State Master
+* Daily Streak
+* Backup Hero
+
+---
+
+## 🔍 Search & Filters
+
+Powerful filtering options:
+
+* Search Tasks
+* Category Filter
+* Status Filter
+* Favorites
+* Pinned Tasks
+* Priority Filter
+
+Sorting options:
+
+* Due Date
+* Priority
+* Name
+* Completion Status
+
+---
+
+## 💾 Data Management
+
+* LocalStorage Persistence
+* JSON Export
+* JSON Import
+* CSV Export
+* Workspace Reset
+
+---
+
+## 🎨 UI Features
+
+* Glassmorphism Design
+* Dark / Light Mode
+* Accent Color Themes
+* Responsive Layout
+* Smooth Animations
+* Mobile Friendly
+
+---
+
+# 🛠 Technology Stack
+
+## Frontend
+
+* HTML5
+* CSS3
+* JavaScript (ES6)
+
+## Browser APIs
+
+* LocalStorage API
+* Drag & Drop API
+* Web Audio API
+* Canvas API
+
+## Libraries
+
+* Chart.js
+
+---
+
+# 📂 Project Structure
+
+```text
+TechNova_TaskManager/
+│
+├── index.html
+├── styles.css
+├── app.js
+├── README.md
+└── assets/
+```
+
+---
+
+# 🚀 Getting Started
+
+Clone the repository
+
+```bash
+git clone https://github.com/your-username/TechNova_TaskManager.git
+```
+
+Navigate into the project
+
+```bash
+cd TechNova_TaskManager
+```
+
+Open the project
+
+```bash
+Open index.html
+```
+
+Or run a local server
+
+```bash
+python -m http.server 5500
+```
+
+Visit
+
+```text
+http://localhost:5500
+```
+
+---
+
+# 📊 Application Workflow
+
+```text
+Login
+   │
+   ▼
+Dashboard
+   │
+Create Tasks
+   │
+Organize with Categories
+   │
+Track Progress
+   │
+Focus with Pomodoro
+   │
+Analyze Productivity
+   │
+Export Workspace
+```
+
+---
+
+# 📸 Screenshots
+
+Create a folder named:
+
+```text
+screenshots/
+```
+
+Add the following screenshots.
+
+---
+
+## 🏠 Dashboard
+
+File:
+
+```text
+screenshots/dashboard.png
+```
+
+Capture:
+
+* Statistics Cards
+* Progress Ring
+* Welcome Section
+
+```md
+![Dashboard](screenshots/dashboard.png)
+```
+
+---
+
+## 🔐 Login Page
+
+```text
+screenshots/login.png
+```
+
+Capture:
+
+* Login Form
+* Sign Up Option
+
+---
+
+## ✅ Task Management
+
+```text
+screenshots/task-management.png
+```
+
+Show:
+
+* Task Cards
+* Priorities
+* Categories
+* Due Dates
+
+---
+
+## 📋 Kanban Board
+
+```text
+screenshots/kanban-board.png
+```
+
+Show:
+
+* To Do
+* Doing
+* Done
+* Drag & Drop
+
+---
+
+## 📅 Calendar
+
+```text
+screenshots/calendar.png
+```
+
+---
+
+## 📊 Analytics Dashboard
+
+```text
+screenshots/analytics.png
+```
+
+Capture:
+
+* Chart.js Graphs
+* Completion Statistics
+
+---
+
+## ⏱ Pomodoro Timer
+
+```text
+screenshots/pomodoro.png
+```
+
+---
+
+## 🏆 Achievements
+
+```text
+screenshots/achievements.png
+```
+
+---
+
+## 🔍 Search & Filters
+
+```text
+screenshots/search-filter.png
+```
+
+---
+
+## 🎨 Theme Customizer
+
+```text
+screenshots/themes.png
+```
+
+Show:
+
+* Dark Mode
+* Accent Colors
+
+---
+
+## 📱 Mobile Responsive View
+
+```text
+screenshots/mobile.png
+```
+
+Capture using Chrome DevTools mobile mode.
+
+---
+
+# 🚀 Future Enhancements
+
+* Cloud Synchronization
+* Google Authentication
+* Team Workspaces
+* Shared Projects
+* Email Notifications
+* AI Task Prioritization
+* Voice Commands
+* Progressive Web App (PWA)
+
+---
+
+# 👩‍💻 Author
+
+## Bhumi Singh
+
+**B.Tech CSE (Artificial Intelligence)**
+
+Aspiring Software Engineer | Java Full Stack Developer | Frontend Developer
+
+---
+
+⭐ If you found this project useful, consider giving it a **Star** on GitHub!
