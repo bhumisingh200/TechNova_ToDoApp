@@ -8,9 +8,17 @@
 // ==========================================
 let state = {
   tasks: [],
+  categories: [
+    { name: 'Work', emoji: '🏢' },
+    { name: 'Personal', emoji: '🏠' },
+    { name: 'Study', emoji: '📚' },
+    { name: 'Health', emoji: '💪' }
+  ],
   settings: {
     darkMode: true,
-    theme: 'blue'
+    theme: 'blue',
+    pomoWorkTime: 25,
+    pomoBreakTime: 5
   },
   currentUser: null,
   achievements: {
@@ -96,14 +104,37 @@ function getRelativeDateString(daysFromNow) {
   return d.toISOString().split('T')[0];
 }
 
-// Load state from LocalStorage
-function loadState() {
-  const savedState = localStorage.getItem('technova_state');
-  if (savedState) {
-    try {
-      const parsed = JSON.parse(savedState);
-      // Merge keys to preserve missing default values
+// Load state from LocalStorage or Database
+async function loadState(username) {
+  if (!username) {
+    state.tasks = [];
+    state.categories = [
+      { name: 'Work', emoji: '🏢' },
+      { name: 'Personal', emoji: '🏠' },
+      { name: 'Study', emoji: '📚' },
+      { name: 'Health', emoji: '💪' }
+    ];
+    state.stats.totalPomodoros = 0;
+    state.stats.dailyCompletionLog = {};
+    Object.keys(state.achievements).forEach(key => {
+      state.achievements[key].unlocked = false;
+    });
+    syncPomoTimerSettings();
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/todo/state?username=${encodeURIComponent(username)}`);
+    const data = await res.json();
+    if (res.ok && data.success && data.state) {
+      const parsed = data.state;
       state.tasks = parsed.tasks || [];
+      state.categories = parsed.categories || [
+        { name: 'Work', emoji: '🏢' },
+        { name: 'Personal', emoji: '🏠' },
+        { name: 'Study', emoji: '📚' },
+        { name: 'Health', emoji: '💪' }
+      ];
       state.settings = { ...state.settings, ...parsed.settings };
       state.stats = { ...state.stats, ...parsed.stats };
       if (parsed.achievements) {
@@ -113,26 +144,96 @@ function loadState() {
           }
         });
       }
-    } catch (e) {
-      console.error('Error loading state from localStorage:', e);
-      state.tasks = defaultTasks;
+    } else {
+      // Seed default tasks for new users
+      state.tasks = JSON.parse(JSON.stringify(defaultTasks));
+      state.categories = [
+        { name: 'Work', emoji: '🏢' },
+        { name: 'Personal', emoji: '🏠' },
+        { name: 'Study', emoji: '📚' },
+        { name: 'Health', emoji: '💪' }
+      ];
+      const today = new Date().toISOString().split('T')[0];
+      const yesterday = getRelativeDateString(-1);
+      const twoDaysAgo = getRelativeDateString(-2);
+      state.stats.dailyCompletionLog = {};
+      state.stats.dailyCompletionLog[today] = 1;
+      state.stats.dailyCompletionLog[yesterday] = 3;
+      state.stats.dailyCompletionLog[twoDaysAgo] = 2;
+      state.stats.totalPomodoros = 0;
+      Object.keys(state.achievements).forEach(key => {
+        state.achievements[key].unlocked = false;
+      });
+      await saveState(username);
     }
-  } else {
-    state.tasks = defaultTasks;
-    // Log previous completion counts for demonstration graph
-    const today = new Date().toISOString().split('T')[0];
-    const yesterday = getRelativeDateString(-1);
-    const twoDaysAgo = getRelativeDateString(-2);
-    state.stats.dailyCompletionLog[today] = 1;
-    state.stats.dailyCompletionLog[yesterday] = 3;
-    state.stats.dailyCompletionLog[twoDaysAgo] = 2;
-    saveState();
+  } catch (e) {
+    console.warn('Error loading state from server, falling back to local cache:', e);
+    const savedState = localStorage.getItem('technova_state_' + username);
+    if (savedState) {
+      try {
+        const parsed = JSON.parse(savedState);
+        state.tasks = parsed.tasks || [];
+        state.categories = parsed.categories || [
+          { name: 'Work', emoji: '🏢' },
+          { name: 'Personal', emoji: '🏠' },
+          { name: 'Study', emoji: '📚' },
+          { name: 'Health', emoji: '💪' }
+        ];
+        state.settings = { ...state.settings, ...parsed.settings };
+        state.stats = { ...state.stats, ...parsed.stats };
+        if (parsed.achievements) {
+          Object.keys(parsed.achievements).forEach(key => {
+            if (state.achievements[key]) {
+              state.achievements[key].unlocked = parsed.achievements[key].unlocked;
+            }
+          });
+        }
+      } catch (err) {
+        state.tasks = defaultTasks;
+      }
+    } else {
+      state.tasks = JSON.parse(JSON.stringify(defaultTasks));
+      state.categories = [
+        { name: 'Work', emoji: '🏢' },
+        { name: 'Personal', emoji: '🏠' },
+        { name: 'Study', emoji: '📚' },
+        { name: 'Health', emoji: '💪' }
+      ];
+      const today = new Date().toISOString().split('T')[0];
+      const yesterday = getRelativeDateString(-1);
+      const twoDaysAgo = getRelativeDateString(-2);
+      state.stats.dailyCompletionLog = {};
+      state.stats.dailyCompletionLog[today] = 1;
+      state.stats.dailyCompletionLog[yesterday] = 3;
+      state.stats.dailyCompletionLog[twoDaysAgo] = 2;
+      state.stats.totalPomodoros = 0;
+      Object.keys(state.achievements).forEach(key => {
+        state.achievements[key].unlocked = false;
+      });
+      localStorage.setItem('technova_state_' + username, JSON.stringify(state));
+    }
   }
+  syncPomoTimerSettings();
 }
 
-// Save state to LocalStorage
-function saveState() {
-  localStorage.setItem('technova_state', JSON.stringify(state));
+// Save state to LocalStorage and Database
+async function saveState(username = state.currentUser) {
+  if (username) {
+    // Local backup
+    localStorage.setItem('technova_state_' + username, JSON.stringify(state));
+    
+    try {
+      await fetch('/api/todo/state', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, state })
+      });
+    } catch (e) {
+      console.warn('Error saving state to database server:', e);
+    }
+  }
 }
 
 // ==========================================
@@ -312,20 +413,17 @@ function refreshActiveViewContent() {
 // Update counters in sidebar categories, tags cloud and linked task selectors
 function updateHeaderWidgets() {
   // Update categories badge count
-  const categories = ['Work', 'Personal', 'Study', 'Health'];
   const categoryContainer = document.getElementById('sidebar-categories');
   if (categoryContainer) {
-    categoryContainer.innerHTML = categories.map(cat => {
-      const count = state.tasks.filter(t => t.category === cat && !t.completed).length;
-      const isActive = activeCategory === cat ? 'active' : '';
-      let emoji = '🏢';
-      if (cat === 'Personal') emoji = '🏠';
-      if (cat === 'Study') emoji = '📚';
-      if (cat === 'Health') emoji = '💪';
+    categoryContainer.innerHTML = state.categories.map(cat => {
+      const name = cat.name;
+      const emoji = cat.emoji || '🏷️';
+      const count = state.tasks.filter(t => t.category === name && !t.completed).length;
+      const isActive = activeCategory === name ? 'active' : '';
 
       return `
-        <button class="category-btn ${isActive}" data-category="${cat}">
-          <span class="category-name-wrap">${emoji} ${cat}</span>
+        <button class="category-btn ${isActive}" data-category="${name}">
+          <span class="category-name-wrap">${emoji} ${name}</span>
           <span class="category-count">${count}</span>
         </button>
       `;
@@ -602,6 +700,14 @@ function toggleFavoriteTask(taskId) {
 
 // Modal Toggle Handlers
 function openTaskModal(columnStatus = 'todo') {
+  // Populate category select options first
+  const categorySelect = document.getElementById('task-category');
+  if (categorySelect) {
+    categorySelect.innerHTML = state.categories.map(cat => {
+      return `<option value="${cat.name}">${cat.emoji || '🏷️'} ${cat.name}</option>`;
+    }).join('');
+  }
+
   document.getElementById('task-modal').classList.remove('hidden');
   
   // Set default column target if quick add from Kanban
@@ -611,6 +717,12 @@ function openTaskModal(columnStatus = 'todo') {
     document.getElementById('task-edit-id').value = '';
     // Focus title
     setTimeout(() => document.getElementById('task-title').focus(), 100);
+  } else {
+    // Re-apply value if editing
+    const task = state.tasks.find(t => t.id === editTaskId);
+    if (task && categorySelect) {
+      categorySelect.value = task.category;
+    }
   }
 }
 
@@ -1222,6 +1334,18 @@ let pomoInterval = null;
 let pomoIsRunning = false;
 let pomoMode = 'work'; // 'work' or 'break'
 
+function syncPomoTimerSettings() {
+  const pomoDurationSelect = document.getElementById('pomo-duration-select');
+  if (pomoDurationSelect) {
+    pomoDurationSelect.value = state.settings.pomoWorkTime || 25;
+  }
+  if (!pomoIsRunning && pomoMode === 'work') {
+    pomoMinutes = state.settings.pomoWorkTime || 25;
+    pomoSeconds = 0;
+    updatePomoUI();
+  }
+}
+
 function togglePomoTimer() {
   if (pomoIsRunning) {
     pausePomoTimer();
@@ -1265,7 +1389,7 @@ function pausePomoTimer() {
 function resetPomoTimer() {
   pausePomoTimer();
   pomoMode = 'work';
-  pomoMinutes = 25;
+  pomoMinutes = state.settings.pomoWorkTime || 25;
   pomoSeconds = 0;
   document.getElementById('pomo-status').innerText = 'Focus Session';
   updatePomoUI();
@@ -1298,7 +1422,7 @@ function handlePomoCompletion() {
     
     // Switch to break
     pomoMode = 'break';
-    pomoMinutes = 5;
+    pomoMinutes = state.settings.pomoBreakTime || 5;
     pomoSeconds = 0;
     document.getElementById('pomo-status').innerText = 'Short Break';
     
@@ -1310,7 +1434,7 @@ function handlePomoCompletion() {
     // Break finished
     showToast('Break finished! Back to focus.', 'info');
     pomoMode = 'work';
-    pomoMinutes = 25;
+    pomoMinutes = state.settings.pomoWorkTime || 25;
     pomoSeconds = 0;
     document.getElementById('pomo-status').innerText = 'Focus Session';
   }
@@ -1544,36 +1668,18 @@ function updateNotificationsPanel() {
 // ==========================================
 // 15B. USER AUTHENTICATION HANDLERS
 // ==========================================
-function checkAuthSession() {
+async function checkAuthSession() {
   const authOverlay = document.getElementById('auth-overlay');
   const welcomeUser = document.getElementById('welcome-username');
 
-  // Initialize users database in localStorage if missing
-  let usersDB = localStorage.getItem('technova_users_db');
-  if (!usersDB) {
-    usersDB = { 'admin': 'password' };
-    localStorage.setItem('technova_users_db', JSON.stringify(usersDB));
-  } else {
-    try {
-      usersDB = JSON.parse(usersDB);
-    } catch(e) {
-      usersDB = { 'admin': 'password' };
-      localStorage.setItem('technova_users_db', JSON.stringify(usersDB));
-    }
-  }
-
-  const storedUser = localStorage.getItem('technova_current_user');
-  if (storedUser) {
-    state.currentUser = storedUser;
-    if (authOverlay) authOverlay.classList.add('hidden');
-    if (welcomeUser) welcomeUser.innerText = storedUser;
-  } else {
-    state.currentUser = null;
-    if (authOverlay) authOverlay.classList.remove('hidden');
-  }
+  // Always force login screen on boot/refresh
+  localStorage.removeItem('technova_current_user');
+  state.currentUser = null;
+  if (authOverlay) authOverlay.classList.remove('hidden');
+  await loadState(null);
 }
 
-function handleLoginSubmit(e) {
+async function handleLoginSubmit(e) {
   e.preventDefault();
   const userVal = document.getElementById('login-username').value.trim();
   const passVal = document.getElementById('login-password').value;
@@ -1583,31 +1689,67 @@ function handleLoginSubmit(e) {
     return;
   }
 
-  let usersDB = {};
   try {
-    usersDB = JSON.parse(localStorage.getItem('technova_users_db')) || { 'admin': 'password' };
-  } catch(err) {
-    usersDB = { 'admin': 'password' };
-  }
+    const res = await fetch('/api/todo/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username: userVal, password: passVal })
+    });
+    const data = await res.json();
 
-  if (usersDB[userVal] && usersDB[userVal] === passVal) {
-    localStorage.setItem('technova_current_user', userVal);
-    state.currentUser = userVal;
-    
-    const authOverlay = document.getElementById('auth-overlay');
-    if (authOverlay) authOverlay.classList.add('hidden');
-    
-    const welcomeUser = document.getElementById('welcome-username');
-    if (welcomeUser) welcomeUser.innerText = userVal;
+    if (res.ok && data.success) {
+      localStorage.setItem('technova_current_user', userVal);
+      state.currentUser = userVal;
+      
+      const authOverlay = document.getElementById('auth-overlay');
+      if (authOverlay) authOverlay.classList.add('hidden');
+      
+      const welcomeUser = document.getElementById('welcome-username');
+      if (welcomeUser) welcomeUser.innerText = userVal;
 
-    showToast(`Welcome back, ${userVal}!`, 'success');
-    refreshActiveViewContent();
-  } else {
-    showToast('Invalid username or password', 'error');
+      showToast(`Welcome back, ${userVal}!`, 'success');
+      
+      await loadState(userVal);
+      initTheme();
+      refreshActiveViewContent();
+    } else {
+      showToast(data.message || 'Invalid username or password', 'error');
+    }
+  } catch (err) {
+    showToast('Server connection failed. Using local mockup...', 'warning');
+    
+    // Local storage mock DB fallback
+    let usersDB = {};
+    try {
+      usersDB = JSON.parse(localStorage.getItem('technova_users_db')) || { 'admin': 'password' };
+    } catch(e) {
+      usersDB = { 'admin': 'password' };
+    }
+
+    if (usersDB[userVal] && usersDB[userVal] === passVal) {
+      localStorage.setItem('technova_current_user', userVal);
+      state.currentUser = userVal;
+      
+      const authOverlay = document.getElementById('auth-overlay');
+      if (authOverlay) authOverlay.classList.add('hidden');
+      
+      const welcomeUser = document.getElementById('welcome-username');
+      if (welcomeUser) welcomeUser.innerText = userVal;
+
+      showToast(`Welcome back, ${userVal}! (Offline mode)`, 'success');
+      
+      await loadState(userVal);
+      initTheme();
+      refreshActiveViewContent();
+    } else {
+      showToast('Invalid username or password', 'error');
+    }
   }
 }
 
-function handleRegisterSubmit(e) {
+async function handleRegisterSubmit(e) {
   e.preventDefault();
   const userVal = document.getElementById('register-username').value.trim();
   const passVal = document.getElementById('register-password').value;
@@ -1623,40 +1765,88 @@ function handleRegisterSubmit(e) {
     return;
   }
 
-  let usersDB = {};
   try {
-    usersDB = JSON.parse(localStorage.getItem('technova_users_db')) || { 'admin': 'password' };
-  } catch(err) {
-    usersDB = { 'admin': 'password' };
+    const res = await fetch('/api/todo/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username: userVal, password: passVal })
+    });
+    const data = await res.json();
+
+    if (res.ok && data.success) {
+      // Local sync fallback
+      let usersDB = {};
+      try {
+        usersDB = JSON.parse(localStorage.getItem('technova_users_db')) || { 'admin': 'password' };
+      } catch(e) {
+        usersDB = { 'admin': 'password' };
+      }
+      usersDB[userVal] = passVal;
+      localStorage.setItem('technova_users_db', JSON.stringify(usersDB));
+
+      localStorage.setItem('technova_current_user', userVal);
+      state.currentUser = userVal;
+
+      const authOverlay = document.getElementById('auth-overlay');
+      if (authOverlay) authOverlay.classList.add('hidden');
+
+      const welcomeUser = document.getElementById('welcome-username');
+      if (welcomeUser) welcomeUser.innerText = userVal;
+
+      showToast('Registration successful! Welcome.', 'success');
+      
+      e.target.reset();
+      document.getElementById('register-form').classList.add('hidden');
+      document.getElementById('login-form').classList.remove('hidden');
+
+      await loadState(userVal);
+      initTheme();
+      refreshActiveViewContent();
+    } else {
+      showToast(data.message || 'Registration failed', 'error');
+    }
+  } catch (err) {
+    showToast('Server connection failed. Registering locally...', 'warning');
+    
+    let usersDB = {};
+    try {
+      usersDB = JSON.parse(localStorage.getItem('technova_users_db')) || { 'admin': 'password' };
+    } catch(e) {
+      usersDB = { 'admin': 'password' };
+    }
+
+    if (usersDB[userVal]) {
+      showToast('Username already exists', 'error');
+      return;
+    }
+
+    usersDB[userVal] = passVal;
+    localStorage.setItem('technova_users_db', JSON.stringify(usersDB));
+    
+    localStorage.setItem('technova_current_user', userVal);
+    state.currentUser = userVal;
+
+    const authOverlay = document.getElementById('auth-overlay');
+    if (authOverlay) authOverlay.classList.add('hidden');
+
+    const welcomeUser = document.getElementById('welcome-username');
+    if (welcomeUser) welcomeUser.innerText = userVal;
+
+    showToast('Registration successful! (Offline mode)', 'success');
+    
+    e.target.reset();
+    document.getElementById('register-form').classList.add('hidden');
+    document.getElementById('login-form').classList.remove('hidden');
+
+    await loadState(userVal);
+    initTheme();
+    refreshActiveViewContent();
   }
-
-  if (usersDB[userVal]) {
-    showToast('Username already exists', 'error');
-    return;
-  }
-
-  usersDB[userVal] = passVal;
-  localStorage.setItem('technova_users_db', JSON.stringify(usersDB));
-  
-  localStorage.setItem('technova_current_user', userVal);
-  state.currentUser = userVal;
-
-  const authOverlay = document.getElementById('auth-overlay');
-  if (authOverlay) authOverlay.classList.add('hidden');
-
-  const welcomeUser = document.getElementById('welcome-username');
-  if (welcomeUser) welcomeUser.innerText = userVal;
-
-  showToast('Registration successful! Welcome.', 'success');
-  
-  e.target.reset();
-  document.getElementById('register-form').classList.add('hidden');
-  document.getElementById('login-form').classList.remove('hidden');
-
-  refreshActiveViewContent();
 }
 
-function handleLogout() {
+async function handleLogout() {
   if (confirm('Are you sure you want to log out of this workspace?')) {
     if (pomoIsRunning) {
       pausePomoTimer();
@@ -1674,19 +1864,91 @@ function handleLogout() {
     if (authOverlay) authOverlay.classList.remove('hidden');
 
     showToast('Successfully logged out', 'info');
+
+    await loadState(null);
+    initTheme();
+    refreshActiveViewContent();
   }
+}
+
+function handleCreateCategory() {
+  const input = document.getElementById('new-category-input');
+  if (!input) return;
+
+  const rawVal = input.value.trim();
+  if (!rawVal) {
+    showToast('Category name cannot be empty', 'error');
+    return;
+  }
+
+  // Parse emoji and text
+  const emojiRegex = /^\s*([\uD800-\uDBFF][\uDC00-\uDFFF]|\p{Emoji})\s*(.*)$/u;
+  const match = rawVal.match(emojiRegex);
+  
+  let emoji = '🏷️';
+  let name = rawVal;
+  
+  if (match) {
+    emoji = match[1];
+    name = match[2].trim();
+  }
+  
+  if (!name) {
+    name = rawVal;
+    emoji = '🏷️';
+  }
+
+  // Check duplicate
+  if (state.categories.some(c => c.name.toLowerCase() === name.toLowerCase())) {
+    showToast('Category already exists', 'error');
+    return;
+  }
+
+  state.categories.push({ name, emoji });
+  saveState();
+  
+  input.value = '';
+  const inlineForm = document.getElementById('inline-category-form');
+  if (inlineForm) inlineForm.classList.add('hidden');
+  
+  updateHeaderWidgets();
+  showToast(`Category "${name}" created!`, 'success');
 }
 
 // ==========================================
 // 16. BIND EVENT LISTENERS & INITS
 // ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-  // 1. Initial State Sync
-  loadState();
+document.addEventListener('DOMContentLoaded', async () => {
+  // 1. Initial State Sync & Auth Check
+  await checkAuthSession();
   initTheme();
-  checkAuthSession();
   refreshActiveViewContent();
   initKanbanDropzones();
+
+  // Category addition listeners
+  const btnAddCategory = document.getElementById('btn-add-category');
+  const inlineCategoryForm = document.getElementById('inline-category-form');
+  if (btnAddCategory && inlineCategoryForm) {
+    btnAddCategory.addEventListener('click', () => {
+      inlineCategoryForm.classList.toggle('hidden');
+      if (!inlineCategoryForm.classList.contains('hidden')) {
+        document.getElementById('new-category-input').focus();
+      }
+    });
+  }
+
+  const btnSubmitCategory = document.getElementById('btn-submit-category');
+  if (btnSubmitCategory) {
+    btnSubmitCategory.addEventListener('click', handleCreateCategory);
+  }
+  const newCategoryInput = document.getElementById('new-category-input');
+  if (newCategoryInput) {
+    newCategoryInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        handleCreateCategory();
+      }
+    });
+  }
 
   // 2. Tab view events
   document.querySelectorAll('.sidebar-menu .nav-item').forEach(btn => {
@@ -1737,11 +1999,10 @@ document.addEventListener('DOMContentLoaded', () => {
     taskForm.addEventListener('submit', handleTaskFormSubmit);
   }
 
-  // 6. Header Theme / Light / Dark modes clicks
-  const themeBox = document.querySelector('.theme-customizer');
-  if (themeBox) {
-    themeBox.addEventListener('click', handleThemeChange);
-  }
+  // 6. Theme customizer clicks (header & sidebar)
+  document.querySelectorAll('.theme-customizer').forEach(box => {
+    box.addEventListener('click', handleThemeChange);
+  });
 
   const modeBtn = document.getElementById('mode-toggle');
   if (modeBtn) {
@@ -1785,6 +2046,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Kanban mobile tabs click handlers
+  document.querySelectorAll('.kanban-mobile-tabs .kanban-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.kanban-mobile-tabs .kanban-tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const targetColumn = btn.getAttribute('data-column');
+      
+      document.querySelectorAll('.kanban-column').forEach(col => {
+        if (col.getAttribute('data-status') === targetColumn) {
+          col.classList.add('active-mobile');
+        } else {
+          col.classList.remove('active-mobile');
+        }
+      });
+    });
+  });
+
   // 10. Calendar monthly navs
   const prevMonthBtn = document.getElementById('calendar-prev-month');
   if (prevMonthBtn) {
@@ -1811,6 +2089,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const pomoResetBtn = document.getElementById('pomo-reset');
   if (pomoResetBtn) {
     pomoResetBtn.addEventListener('click', resetPomoTimer);
+  }
+
+  // Pomodoro duration change listener
+  const pomoDurationSelect = document.getElementById('pomo-duration-select');
+  if (pomoDurationSelect) {
+    pomoDurationSelect.addEventListener('change', (e) => {
+      const selectedMins = parseInt(e.target.value, 10);
+      state.settings.pomoWorkTime = selectedMins;
+      saveState();
+      
+      if (!pomoIsRunning && pomoMode === 'work') {
+        pomoMinutes = selectedMins;
+        pomoSeconds = 0;
+        updatePomoUI();
+      }
+      showToast(`Focus session duration set to ${selectedMins} minutes.`, 'success');
+    });
   }
 
   // 12. Backup tool triggers
@@ -1840,8 +2135,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const mobileMenuBtn = document.getElementById('mobile-menu-btn');
   const sidebar = document.getElementById('sidebar');
   if (mobileMenuBtn && sidebar) {
-    mobileMenuBtn.addEventListener('click', () => {
+    mobileMenuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       sidebar.classList.toggle('active');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (sidebar.classList.contains('active')) {
+        const isClickInside = sidebar.contains(e.target) || mobileMenuBtn.contains(e.target);
+        if (!isClickInside) {
+          sidebar.classList.remove('active');
+        }
+      }
+    });
+
+    sidebar.addEventListener('click', (e) => {
+      if (window.innerWidth <= 768) {
+        if (e.target.closest('.nav-item') || e.target.closest('.category-btn') || e.target.closest('.tag-badge') || e.target.id === 'sidebar-logout') {
+          sidebar.classList.remove('active');
+        }
+      }
     });
   }
 

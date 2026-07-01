@@ -1994,3 +1994,174 @@ ul {
   color: #ef4444 !important;
   border-color: rgba(239, 68, 68, 0.3) !important;
 }
+
+/* ==========================================
+   MOBILE & DEVICE RESPONSIVENESS OVERRIDES
+   ========================================== */
+
+/* Mobile theme section in sidebar is hidden on desktop by default */
+.mobile-theme-section {
+  display: none !important;
+}
+
+/* Kanban mobile tabs are hidden on desktop by default */
+.kanban-mobile-tabs {
+  display: none;
+  gap: 8px;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.kanban-tab-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.kanban-tab-btn.active {
+  background: var(--primary-color);
+  color: #fff;
+  border-color: var(--primary-color);
+}
+
+/* Mobile responsive media queries */
+@media (max-width: 768px) {
+  .mobile-theme-section {
+    display: block !important;
+  }
+
+  .header {
+    height: auto !important;
+    padding: 12px 16px !important;
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+  }
+
+  .header-search {
+    order: 1 !important;
+    flex: 1 1 auto !important;
+    width: 100% !important;
+  }
+
+  .pomodoro-mini-widget {
+    display: flex !important; /* Force visible on mobile */
+    order: 3 !important;
+    flex: 1 1 100% !important;
+    justify-content: space-between !important;
+    margin-right: 0 !important;
+    background: var(--card-bg) !important;
+    border: 1px solid var(--border-color) !important;
+    padding: 8px 12px !important;
+    border-radius: 12px !important;
+    width: 100% !important;
+  }
+
+  .header-actions {
+    order: 2 !important;
+    margin-left: auto !important;
+    gap: 8px !important;
+  }
+
+  /* Kanban board tabbed columns for mobile */
+  .kanban-mobile-tabs {
+    display: flex !important;
+  }
+
+  .kanban-board {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    overflow-y: visible !important;
+  }
+
+  .kanban-board .kanban-column {
+    display: none !important; /* Hide other columns on mobile */
+  }
+
+  .kanban-board .kanban-column.active-mobile {
+    display: flex !important; /* Show active mobile column */
+    width: 100% !important;
+    height: 520px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Hide theme customizer from header on mobile */
+  .header .theme-customizer {
+    display: none !important;
+  }
+
+  /* Make filter tabs horizontally scrollable with swipe gesture */
+  .filter-tabs {
+    display: flex !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    padding-bottom: 4px !important;
+    width: 100% !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .filter-tabs::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .filter-tab {
+    flex: 0 0 auto !important;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Welcome banner vertical layout */
+  .welcome-banner {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 16px !important;
+    padding: 20px !important;
+  }
+
+  /* Add Task CTA shows only plus icon to save space */
+  #btn-add-task-modal span {
+    display: none !important;
+  }
+  
+  #btn-add-task-modal {
+    padding: 8px !important;
+    border-radius: 50% !important;
+    width: 38px !important;
+    height: 38px !important;
+    justify-content: center !important;
+  }
+
+  #btn-add-task-modal svg {
+    margin-right: 0 !important;
+  }
+}
+
+@media (max-width: 520px) {
+  /* Convert stats display into a compact 2x2 grid */
+  .dashboard-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .stat-card {
+    padding: 12px !important;
+    min-height: 80px !important;
+  }
+
+  .stat-card-title {
+    font-size: 11px !important;
+  }
+
+  .stat-card-value {
+    font-size: 18px !important;
+  }
+}

@@ -47,7 +47,17 @@
       <div class="sidebar-divider"></div>
 
       <div class="sidebar-section">
-        <span class="section-title">Categories</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span class="section-title" style="margin-bottom: 0;">Categories</span>
+          <button id="btn-add-category" title="Add category" style="font-size: 11px; font-weight: 700; color: var(--primary-color); text-transform: uppercase; padding: 2px 8px; border-radius: 4px; border: 1px solid transparent; transition: all var(--transition-fast);">+ Add</button>
+        </div>
+        <!-- Inline Category Form -->
+        <div id="inline-category-form" class="hidden" style="padding: 0 8px; margin-bottom: 8px;">
+          <div style="display: flex; gap: 6px;">
+            <input type="text" id="new-category-input" placeholder="e.g. 🎨 Design" style="background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 10px; font-size: 12px; flex: 1; outline: none; color: var(--text-primary);">
+            <button id="btn-submit-category" style="background: var(--primary-color); color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700;">Add</button>
+          </div>
+        </div>
         <div class="category-filters" id="sidebar-categories">
           <!-- Populated by JS -->
         </div>
@@ -57,6 +67,15 @@
         <span class="section-title">Popular Tags</span>
         <div class="tags-cloud" id="sidebar-tags">
           <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <div class="sidebar-section mobile-theme-section">
+        <span class="section-title">Theme Accent</span>
+        <div class="theme-customizer" style="display: flex; gap: 12px; padding: 4px 8px;">
+          <button class="theme-dot blue" data-theme="blue" title="Blue Theme"></button>
+          <button class="theme-dot purple" data-theme="purple" title="Purple Theme"></button>
+          <button class="theme-dot green" data-theme="green" title="Green Theme"></button>
         </div>
       </div>
       
@@ -96,6 +115,13 @@
           </div>
           <select id="pomo-task-link" class="pomo-task-select" aria-label="Link to task">
             <option value="">No linked task</option>
+          </select>
+          <select id="pomo-duration-select" class="pomo-task-select" aria-label="Timer Duration" style="max-width: 80px;">
+            <option value="15">15 min</option>
+            <option value="25" selected>25 min</option>
+            <option value="30">30 min</option>
+            <option value="45">45 min</option>
+            <option value="60">60 min</option>
           </select>
         </div>
 
@@ -274,9 +300,16 @@
 
         <!-- 3. KANBAN BOARD VIEW -->
         <section class="view-panel" id="view-kanban">
+          <!-- Mobile Kanban Tabs Selector -->
+          <div class="kanban-mobile-tabs">
+            <button class="kanban-tab-btn active" data-column="todo">To Do</button>
+            <button class="kanban-tab-btn" data-column="doing">Doing</button>
+            <button class="kanban-tab-btn" data-column="done">Done</button>
+          </div>
+
           <div class="kanban-board">
             <!-- To Do Column -->
-            <div class="kanban-column" id="kanban-todo" data-status="todo">
+            <div class="kanban-column active-mobile" id="kanban-todo" data-status="todo">
               <div class="kanban-column-header">
                 <div class="column-title-group">
                   <span class="column-indicator todo"></span>

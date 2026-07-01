@@ -30,12 +30,12 @@ All application data is stored locally using the browser's LocalStorage API, all
 
 # ✨ Features
 
-## 👤 User Workspace
+## 👤 User Workspace & Database Security
 
-* User Registration & Login
+* User Registration & Login with validation
 * Personalized Dashboard
-* Session Management
-* Secure Local Storage
+* Session Management (forced login screen on reload to enable account switching)
+* Secure Persistent Database (MySQL `technova_db` with `todo_users` and `todo_states` tables)
 * Welcome Messages
 
 ---
@@ -47,7 +47,7 @@ Create and manage tasks with:
 * Title
 * Description
 * Priority Levels
-* Categories
+* Dynamic categories (with dynamic custom category creator in sidebar!)
 * Due Dates
 * Custom Tags
 * Pin Tasks
@@ -87,6 +87,7 @@ Features:
 * Live Counters
 * Quick Add
 * Instant Updates
+* **Tabbed Kanban Display on Mobile:** Compact viewports feature tab switches (To Do / Doing / Done) to hide inactive columns and maximize height space.
 
 ---
 
@@ -101,11 +102,12 @@ Features:
 
 ## ⏱ Pomodoro Focus Timer
 
-* 25-Minute Focus Sessions
-* Break Notifications
+* Customizable session duration selector (15, 25, 30, 45, and 60 minutes)
+* 25-Minute default Focus Sessions
+* Break Notifications (Short Break defaults to 5 minutes)
 * Task Linking
 * Focus Statistics
-* Audio Alerts
+* Audio Alerts (via Web Audio API)
 
 ---
 
@@ -166,15 +168,19 @@ Sorting options:
 
 ## Frontend
 
-* HTML5
-* CSS3
-* JavaScript (ES6)
+* HTML5 (Semantic Structure)
+* CSS3 (Vanilla Custom Properties & Glassmorphic variables)
+* JavaScript (ES6 asynchronous fetch and AJAX calls)
+
+## Backend & Database
+
+* Node.js (native `http`, `fs`, `path` modules)
+* MySQL database server (execSync client runner integration)
 
 ## Browser APIs
 
-* LocalStorage API
 * Drag & Drop API
-* Web Audio API
+* Web Audio API (Synthesizer tones)
 * Canvas API
 
 ## Libraries
@@ -191,43 +197,34 @@ TechNova_TaskManager/
 ├── index.html
 ├── styles.css
 ├── app.js
-├── README.md
-└── assets/
+├── db.js
+├── server.js
+└── README.md
 ```
 
 ---
 
 # 🚀 Getting Started
 
-Clone the repository
+### Prerequisites
 
-```bash
-git clone https://github.com/your-username/TechNova_TaskManager.git
-```
+* Node.js installed locally.
+* MySQL running on `localhost:3306` with username `root` and password `Bhumi@2006` (or customize inside `db.js`).
 
-Navigate into the project
+### Run the App
 
-```bash
-cd TechNova_TaskManager
-```
-
-Open the project
-
-```bash
-Open index.html
-```
-
-Or run a local server
-
-```bash
-python -m http.server 5500
-```
-
-Visit
-
-```text
-http://localhost:5500
-```
+1. Navigate to the project directory:
+   ```bash
+   cd TechNova_ToDoApp
+   ```
+2. Start the backend server:
+   ```bash
+   node server.js
+   ```
+3. Open your browser and visit:
+   ```text
+   http://localhost:3001
+   ```
 
 ---
 
