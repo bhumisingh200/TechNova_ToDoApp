@@ -2,150 +2,244 @@
 
 <div align="center">
 
-### A Modern Productivity & Task Management Platform
+<img src="screenshots/logo.png" width="140">
 
-An advanced productivity dashboard built with **HTML5, CSS3, and Vanilla JavaScript**, featuring Kanban workflows, Pomodoro focus sessions, productivity analytics, gamification, and persistent local storage.
+# **TechNova Task Manager**
 
-<p>
+### 🌟 A Premium Productivity Workspace for Modern Task Management
+
+**TechNova** is a feature-rich productivity dashboard inspired by modern project management tools. Built using **HTML5, CSS3, Vanilla JavaScript, Node.js, and MySQL**, it combines task management, Kanban workflows, Pomodoro focus sessions, analytics, gamification, calendars, and persistent storage into a beautiful glassmorphic interface.
+
+<p align="center">
+
 <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"/>
 <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"/>
 <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"/>
-<img src="https://img.shields.io/badge/Responsive-Yes-success?style=for-the-badge"/>
-<img src="https://img.shields.io/badge/LocalStorage-Persistent-blue?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white"/>
+<img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white"/>
+<img src="https://img.shields.io/badge/Responsive-✔-success?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/Dark%20Mode-Enabled-black?style=for-the-badge"/>
+
 </p>
 
-</div>
+---
+
+## 🌐 Live Demo
+
+> 🔗 **Coming Soon**
 
 ---
 
-# 📖 Overview
+# 🎥 Project Preview
 
-TechNova Task Manager is a feature-rich productivity application designed to help users organize their daily workflow efficiently.
+<p align="center">
 
-Unlike a basic To-Do application, it combines task management, Kanban boards, Pomodoro focus sessions, analytics dashboards, achievements, data export/import, and customizable themes into a single responsive workspace.
+<img src="screenshots/demo.gif" width="900">
 
-All application data is stored locally using the browser's LocalStorage API, allowing users to continue working even after refreshing the page.
+</p>
+
+*A quick walkthrough of the complete application.*
 
 ---
 
-# ✨ Features
+# 📸 Application Screenshots
 
-## 👤 User Workspace & Database Security
+## 🏠 Dashboard
 
-* User Registration & Login with validation
-* Personalized Dashboard
-* Session Management (forced login screen on reload to enable account switching)
-* Secure Persistent Database (MySQL `technova_db` with `todo_users` and `todo_states` tables)
-* Welcome Messages
+<img src="screenshots/dashboard.png" width="900">
+
+View productivity statistics, progress rings, task summaries, quick actions, and personalized greetings.
+
+Monitor:
+
+* Weekly Performance
+* Completion Rate
+* Productivity Charts
+* Focus Statistics
+
+Powered by **Chart.js**.
+
+---
+
+## 🔐 Login & Registration
+
+<img src="screenshots/login.png" width="900">
+
+Secure authentication system with account creation, validation, and persistent sessions.
 
 ---
 
 ## ✅ Task Management
 
-Create and manage tasks with:
+<img src="screenshots/tasks.png" width="900">
 
-* Title
-* Description
+Features include:
+
 * Priority Levels
-* Dynamic categories (with dynamic custom category creator in sidebar!)
+* Categories
+* Tags
 * Due Dates
-* Custom Tags
+* Favorites
 * Pin Tasks
-* Favorite Tasks
-* Edit Tasks
-* Delete Tasks
-* Mark Complete
+* Edit & Delete
+* Completion Status
 
 ---
 
-## 📊 Productivity Dashboard
+## 📋 Kanban Workflow
 
-Monitor productivity using:
+<img src="screenshots/kanban.png" width="900">
 
-* Animated Statistics Cards
-* Completion Progress Ring
-* Task Completion Percentage
-* Weekly Analytics Charts
-* Focus Drawer
-* Productivity Summary
+Interactive drag-and-drop task organization across:
 
----
-
-## 📋 Kanban Board
-
-Interactive drag-and-drop workflow.
-
-Columns include:
-
-* To Do
-* Doing
-* Done
-
-Features:
-
-* Drag & Drop
-* Live Counters
-* Quick Add
-* Instant Updates
-* **Tabbed Kanban Display on Mobile:** Compact viewports feature tab switches (To Do / Doing / Done) to hide inactive columns and maximize height space.
+* 📌 To Do
+* 🚧 Doing
+* ✅ Done
 
 ---
 
 ## 📅 Calendar Planner
 
-* Monthly Calendar View
-* Due Date Indicators
-* Daily Task Drawer
-* Previous / Next Month Navigation
+<img src="screenshots/calendar.png" width="900">
+
+Monthly planner with due-date indicators and quick navigation.
 
 ---
 
-## ⏱ Pomodoro Focus Timer
+## ⏱ Pomodoro Focus Mode
 
-* Customizable session duration selector (15, 25, 30, 45, and 60 minutes)
-* 25-Minute default Focus Sessions
-* Break Notifications (Short Break defaults to 5 minutes)
-* Task Linking
-* Focus Statistics
-* Audio Alerts (via Web Audio API)
+<img src="screenshots/pomodoro.png" width="900">
+
+Boost productivity with customizable focus sessions, break reminders, and audio notifications.
 
 ---
 
 ## 🏆 Achievement System
 
-Unlock badges such as:
+<img src="screenshots/achievements.png" width="900">
 
-* First Task Completed
-* Productivity Titan
-* Flow State Master
+Unlock badges including:
+
+* First Task
 * Daily Streak
+* Productivity Titan
 * Backup Hero
+* Flow State Master
 
 ---
 
-## 🔍 Search & Filters
+## 🔍 Smart Search & Filters
 
-Powerful filtering options:
+<img src="screenshots/search.png" width="900">
 
-* Search Tasks
-* Category Filter
-* Status Filter
-* Favorites
-* Pinned Tasks
-* Priority Filter
+Search tasks instantly and filter using:
 
-Sorting options:
-
-* Due Date
 * Priority
-* Name
-* Completion Status
+* Category
+* Status
+* Favorites
+* Due Date
+* Tags
+
+---
+
+## 🎨 Theme Customizer
+
+<img src="screenshots/theme.png" width="900">
+
+Personalize your workspace with:
+
+* 🌙 Dark Mode
+* ☀️ Light Mode
+* Multiple Accent Colors
+* Responsive Layout
+
+---
+
+## 📱 Mobile Experience
+
+<img src="screenshots/mobile.png" width="350">
+
+Fully responsive interface optimized for tablets and smartphones.
+
+---
+
+# ✨ Key Features
+
+## 👤 Authentication
+
+* Secure Login & Registration
+* Session Management
+* Personalized Dashboard
+* Persistent User Accounts
+
+---
+
+## ✅ Task Management
+
+* Create Unlimited Tasks
+* Categories
+* Custom Tags
+* Priority Levels
+* Due Dates
+* Favorites
+* Pin Tasks
+* Edit/Delete
+* Completion Tracking
+
+---
+
+## 📋 Kanban Board
+
+* Drag & Drop
+* Live Counters
+* Quick Add
+* Mobile Tab View
+* Real-Time Updates
+
+---
+
+## 📊 Analytics Dashboard
+
+* Animated Statistics
+* Completion Progress Ring
+* Weekly Reports
+* Productivity Summary
+* Interactive Charts
+
+---
+
+## 📅 Calendar Planner
+
+* Monthly Calendar
+* Due Date Highlights
+* Daily Tasks Drawer
+* Navigation Controls
+
+---
+
+## ⏱ Pomodoro Timer
+
+* 15 / 25 / 30 / 45 / 60 Minute Sessions
+* Audio Alerts
+* Break Notifications
+* Focus Statistics
+* Linked Tasks
+
+---
+
+## 🏆 Gamification
+
+* Achievement Badges
+* Daily Streaks
+* Productivity Levels
+* Progress Tracking
 
 ---
 
 ## 💾 Data Management
 
-* LocalStorage Persistence
+* LocalStorage Backup
 * JSON Export
 * JSON Import
 * CSV Export
@@ -153,39 +247,48 @@ Sorting options:
 
 ---
 
-## 🎨 UI Features
+## 🎨 Modern UI
 
 * Glassmorphism Design
-* Dark / Light Mode
-* Accent Color Themes
 * Responsive Layout
+* Dark & Light Themes
+* Accent Color Switcher
 * Smooth Animations
-* Mobile Friendly
 
 ---
 
 # 🛠 Technology Stack
 
-## Frontend
+| Category | Technologies                               |
+| -------- | ------------------------------------------ |
+| Frontend | HTML5, CSS3, JavaScript (ES6)              |
+| Backend  | Node.js                                    |
+| Database | MySQL                                      |
+| Charts   | Chart.js                                   |
+| APIs     | Drag & Drop API, Canvas API, Web Audio API |
+| Storage  | LocalStorage                               |
 
-* HTML5 (Semantic Structure)
-* CSS3 (Vanilla Custom Properties & Glassmorphic variables)
-* JavaScript (ES6 asynchronous fetch and AJAX calls)
+---
 
-## Backend & Database
+# 🏗 Project Architecture
 
-* Node.js (native `http`, `fs`, `path` modules)
-* MySQL database server (execSync client runner integration)
-
-## Browser APIs
-
-* Drag & Drop API
-* Web Audio API (Synthesizer tones)
-* Canvas API
-
-## Libraries
-
-* Chart.js
+```text
+               User
+                 │
+                 ▼
+        Frontend (HTML/CSS/JS)
+                 │
+        AJAX Fetch Requests
+                 │
+                 ▼
+          Node.js Server
+                 │
+                 ▼
+             MySQL Database
+                 │
+                 ▼
+        Persistent User Data
+```
 
 ---
 
@@ -197,8 +300,23 @@ TechNova_TaskManager/
 ├── index.html
 ├── styles.css
 ├── app.js
-├── db.js
 ├── server.js
+├── db.js
+│
+├── screenshots/
+│   ├── dashboard.png
+│   ├── login.png
+│   ├── tasks.png
+│   ├── kanban.png
+│   ├── calendar.png
+│   ├── analytics.png
+│   ├── pomodoro.png
+│   ├── achievements.png
+│   ├── search.png
+│   ├── theme.png
+│   ├── mobile.png
+│   └── demo.gif
+│
 └── README.md
 ```
 
@@ -206,215 +324,78 @@ TechNova_TaskManager/
 
 # 🚀 Getting Started
 
-### Prerequisites
+## Prerequisites
 
-* Node.js installed locally.
-* MySQL running on `localhost:3306` with username `root` and password `Bhumi@2006` (or customize inside `db.js`).
-
-### Run the App
-
-1. Navigate to the project directory:
-   ```bash
-   cd TechNova_ToDoApp
-   ```
-2. Start the backend server:
-   ```bash
-   node server.js
-   ```
-3. Open your browser and visit:
-   ```text
-   http://localhost:3001
-   ```
+* Node.js
+* MySQL Server
+* npm
 
 ---
 
-# 📊 Application Workflow
+## Installation
 
-```text
-Login
-   │
-   ▼
-Dashboard
-   │
-Create Tasks
-   │
-Organize with Categories
-   │
-Track Progress
-   │
-Focus with Pomodoro
-   │
-Analyze Productivity
-   │
-Export Workspace
+```bash
+git clone https://github.com/yourusername/TechNova_TaskManager.git
+
+cd TechNova_TaskManager
+
+npm install
+
+node server.js
 ```
 
----
+Open:
 
-# 📸 Screenshots
-
-Create a folder named:
-
-```text
-screenshots/
 ```
-
-Add the following screenshots.
-
----
-
-## 🏠 Dashboard
-
-File:
-
-```text
-screenshots/dashboard.png
+http://localhost:3001
 ```
-
-Capture:
-
-* Statistics Cards
-* Progress Ring
-* Welcome Section
-
-```md
-![Dashboard](screenshots/dashboard.png)
-```
-
----
-
-## 🔐 Login Page
-
-```text
-screenshots/login.png
-```
-
-Capture:
-
-* Login Form
-* Sign Up Option
-
----
-
-## ✅ Task Management
-
-```text
-screenshots/task-management.png
-```
-
-Show:
-
-* Task Cards
-* Priorities
-* Categories
-* Due Dates
-
----
-
-## 📋 Kanban Board
-
-```text
-screenshots/kanban-board.png
-```
-
-Show:
-
-* To Do
-* Doing
-* Done
-* Drag & Drop
-
----
-
-## 📅 Calendar
-
-```text
-screenshots/calendar.png
-```
-
----
-
-## 📊 Analytics Dashboard
-
-```text
-screenshots/analytics.png
-```
-
-Capture:
-
-* Chart.js Graphs
-* Completion Statistics
-
----
-
-## ⏱ Pomodoro Timer
-
-```text
-screenshots/pomodoro.png
-```
-
----
-
-## 🏆 Achievements
-
-```text
-screenshots/achievements.png
-```
-
----
-
-## 🔍 Search & Filters
-
-```text
-screenshots/search-filter.png
-```
-
----
-
-## 🎨 Theme Customizer
-
-```text
-screenshots/themes.png
-```
-
-Show:
-
-* Dark Mode
-* Accent Colors
-
----
-
-## 📱 Mobile Responsive View
-
-```text
-screenshots/mobile.png
-```
-
-Capture using Chrome DevTools mobile mode.
 
 ---
 
 # 🚀 Future Enhancements
 
-* Cloud Synchronization
-* Google Authentication
-* Team Workspaces
-* Shared Projects
-* Email Notifications
 * AI Task Prioritization
-* Voice Commands
+* Google Authentication
+* Microsoft Login
+* Team Collaboration
+* Shared Workspaces
+* Email Notifications
+* Push Notifications
+* Cloud Synchronization
 * Progressive Web App (PWA)
+* Voice Assistant
+* Offline Mode
+* AI Productivity Insights
 
 ---
 
-# 👩‍💻 Author
+# 👩‍💻 About the Developer
 
-## Bhumi Singh
+## **Bhumi Singh**
 
-**B.Tech CSE (Artificial Intelligence)**
+**B.Tech – Computer Science Engineering (Artificial Intelligence)**
 
-Aspiring Software Engineer | Java Full Stack Developer | Frontend Developer
+💻 Java Full Stack Developer
+
+🌐 Frontend Developer
+
+☕ Java Enthusiast
+
+🚀 Aspiring Software Engineer
 
 ---
 
-⭐ If you found this project useful, consider giving it a **Star** on GitHub!
+# ⭐ Support
+
+If you enjoyed this project or found it useful, please consider giving it a **⭐ Star** on GitHub.
+
+It motivates future development and helps others discover the project.
+
+---
+
+<div align="center">
+
+### 💙 Made with Passion by Bhumi Singh
+
+</div>
+
